@@ -16,8 +16,10 @@ const __dirname = path.dirname(__filename);
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "https://artsy-ai-six.vercel.app/",
+    origin: "https://artsy-ai-six.vercel.app/",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow required headers
   })
 );
 

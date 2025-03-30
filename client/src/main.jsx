@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Homepage from "./routes/homepage/Homepage.jsx";
 
-import DashBoardPage from "./routes/dashboardPage/DashBoardPage.jsx";
+import DashBoardPage from "./routes/dashboardPage/index.jsx"
 
 import ChatPage from "./routes/chatPage/ChatPage.jsx";
 import RootLayout from "./layouts/rootLayout/RootLayout.jsx";

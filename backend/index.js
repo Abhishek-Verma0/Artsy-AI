@@ -1,10 +1,9 @@
 import express from "express";
-import ImageKit from "imagekit";
 import cors from "cors";
-import mongoose from "mongoose";
 import path from "path";
-import url,{fileURLToPath} from "url";
-
+import url, { fileURLToPath } from "url";
+import ImageKit from "imagekit";
+import mongoose from "mongoose";
 import Chat from "./models/chat.js";
 import UserChats from "./models/userChats.js";
 import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
@@ -12,8 +11,8 @@ import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 const port = process.env.PORT || 3000;
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(
   cors({
@@ -27,7 +26,7 @@ app.use(express.json());
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO);
-    console.log("connected to mongo");
+    console.log("Connected to MongoDB");
   } catch (err) {
     console.log(err);
   }
@@ -44,19 +43,12 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
-// app.get("/api/test", ClerkExpressRequireAuth(), async (req, res) => {
-//   const userId = req.auth.userId;
-//   console.log(userId)
-//   res.send("Success")
-// })
-
-app.post("/api/chats", ClerkExpressRequireAuth({}), async (req, res) => {
+app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
   const { text } = req.body;
-  console.log(text);
-  
+
   try {
-    // CREATW A NEW Chat
+    // CREATE A NEW CHAT
     const newChat = new Chat({
       userId: userId,
       history: [{ role: "user", parts: [{ text }] }],
@@ -64,9 +56,10 @@ app.post("/api/chats", ClerkExpressRequireAuth({}), async (req, res) => {
 
     const savedChat = await newChat.save();
 
-    //  check is user chats exists
+    // CHECK IF THE USERCHATS EXISTS
     const userChats = await UserChats.find({ userId: userId });
-    //  if doesn't exist create a new caht and add it to chats array
+
+    // IF DOESN'T EXIST CREATE A NEW ONE AND ADD THE CHAT IN THE CHATS ARRAY
     if (!userChats.length) {
       const newUserChats = new UserChats({
         userId: userId,
@@ -77,9 +70,10 @@ app.post("/api/chats", ClerkExpressRequireAuth({}), async (req, res) => {
           },
         ],
       });
+
       await newUserChats.save();
     } else {
-      //  if  exists  push the chat to the existing array
+      // IF EXISTS, PUSH THE CHAT TO THE EXISTING ARRAY
       await UserChats.updateOne(
         { userId: userId },
         {
@@ -96,7 +90,7 @@ app.post("/api/chats", ClerkExpressRequireAuth({}), async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error creating  chat!");
+    res.status(500).send("Error creating chat!");
   }
 });
 
@@ -105,10 +99,11 @@ app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
 
   try {
     const userChats = await UserChats.find({ userId });
+
     res.status(200).send(userChats[0].chats);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error fetching user Userchats!");
+    res.status(500).send("Error fetching userchats!");
   }
 });
 
@@ -117,15 +112,17 @@ app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
 
   try {
     const chat = await Chat.findOne({ _id: req.params.id, userId });
+
     res.status(200).send(chat);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error fetching user chats!");
+    res.status(500).send("Error fetching chat!");
   }
 });
 
 app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
+
   const { question, answer, img } = req.body;
 
   const newItems = [
@@ -158,15 +155,14 @@ app.use((err, req, res, next) => {
   res.status(401).send("Unauthenticated!");
 });
 
-/**
- * For production below two app.use and get jsut add "/dist"  after client to update path to where our react build app is strored
- */
-app.use(express.static(path.join(__dirname,"../client/dist")))
-app.get("*", (rq, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"))
-})
+// PRODUCTION
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 
 app.listen(port, () => {
   connect();
-  console.log(`Server is running on port ${port}`);
+  console.log("Server running on 3000");
 });

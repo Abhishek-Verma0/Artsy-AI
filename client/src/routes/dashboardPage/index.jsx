@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import "./dashboardPage.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-export const DashboardPage = () => {
+import "./dashboardPage.css";
+import { useNavigate } from "react-router-dom";
+
+const DashboardPage = () => {
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
@@ -11,11 +12,14 @@ export const DashboardPage = () => {
       return fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ text }),
       }).then((res) => res.json());
     },
     onSuccess: (id) => {
+      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["userChats"] });
       navigate(`/dashboard/chats/${id}`);
     },
@@ -36,31 +40,23 @@ export const DashboardPage = () => {
           <h1>Artsy AI</h1>
         </div>
         <div className="options">
-          {/* <div className="option">
+          <div className="option">
             <img src="/chat.png" alt="" />
             <span>Create a New Chat</span>
-          </div> */}
+          </div>
           <div className="option">
             <img src="/image.png" alt="" />
             <span>Analyze Images</span>
           </div>
           <div className="option">
             <img src="/code.png" alt="" />
-            <span>Help me with my code</span>
+            <span>Help me with my Code</span>
           </div>
         </div>
       </div>
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="text"
-            placeholder="Ask me anything..."
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-          />
+          <input type="text" name="text" placeholder="Ask me anything..." />
           <button>
             <img src="/arrow.png" alt="" />
           </button>
@@ -69,4 +65,5 @@ export const DashboardPage = () => {
     </div>
   );
 };
+
 export default DashboardPage;

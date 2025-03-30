@@ -1,20 +1,21 @@
-import { useState } from "react";
-import "./homepage.css";
 import { Link } from "react-router-dom";
+import "./homepage.css";
 import { TypeAnimation } from "react-type-animation";
+import { useState } from "react";
 
 const Homepage = () => {
   const [typingStatus, setTypingStatus] = useState("human1");
 
-
-
   return (
     <div className="homepage">
-      <img src="/orbital.png" className="orbital" />
+      <img src="/orbital.png" alt="" className="orbital" />
       <div className="left">
-        <h1>Artsy AI</h1>
-        <h2>Determine style of the art</h2>
-        <h3>Why waste time on thinking when we are here for you..!</h3>
+        <h1>LAMA AI</h1>
+        <h2>Supercharge your creativity and productivity</h2>
+        <h3>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat sint
+          dolorem doloribus, architecto dolor.
+        </h3>
         <Link to="/dashboard">Get Started</Link>
       </div>
       <div className="right">
@@ -22,7 +23,7 @@ const Homepage = () => {
           <div className="bgContainer">
             <div className="bg"></div>
           </div>
-          <img src="/bot.png" className="bot" />
+          <img src="/bot.png" alt="" className="bot" />
           <div className="chat">
             <img
               src={
@@ -32,27 +33,27 @@ const Homepage = () => {
                   ? "/human2.jpeg"
                   : "bot.png"
               }
-              className=""
+              alt=""
             />
             <TypeAnimation
               sequence={[
                 // Same substring at the start will only be typed out once, initially
-                "Human: Uploaded - art.png",
+                "Human: Can you determine art style of image",
                 2000,
                 () => {
                   setTypingStatus("bot");
                 },
-                "Bot: This image belongs to style Romanticism",
+                "Bot: Yes I can determine the art style",
                 2000,
                 () => {
-                  setTypingStatus("Human2");
+                  setTypingStatus("human2");
                 },
-                "Human: Uploaded - art1.jpeg",
+                "Human2: img.png determine it's art style",
                 2000,
                 () => {
                   setTypingStatus("bot");
                 },
-                "Bot:This art is of style conceptual  art",
+                "Bot: Engraving wall is the possible art style by analyzing texture",
                 2000,
                 () => {
                   setTypingStatus("human1");

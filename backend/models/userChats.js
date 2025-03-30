@@ -26,4 +26,5 @@ const userChatsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.userchats || mongoose.model("userchats", userChatsSchema);
+export default mongoose.models.userchats ||
+  mongoose.model("userchats", userChatsSchema);

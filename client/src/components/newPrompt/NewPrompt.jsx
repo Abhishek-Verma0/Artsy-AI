@@ -16,25 +16,22 @@ const NewPrompt = ({ data }) => {
     aiData: {},
   });
 
-  // Initialize chat with proper history format
-  const getChatInstance = () => {
-    return model.startChat({
-      history:
-        data?.history?.map(({ role, parts }) => ({
-          role,
-          parts: [{ text: parts[0]?.text || parts }],
-        })) || [],
-      generationConfig: {
-        // maxOutputTokens: 100,
-      },
-    });
-  };
+const chat = model.startChat({
+  history:
+    data?.history?.map(({ role, parts }) => ({
+      role,
+      parts: [{ text: parts[0]?.text }],
+    })) || [],
+  generationConfig: {
+    // maxOutputTokens: 100,
+  },
+});
 
   const endRef = useRef(null);
   const formRef = useRef(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    endRef.current.scrollIntoView({ behavior: "smooth" });
   }, [data, question, answer, img.dbData]);
 
   const queryClient = useQueryClient();
@@ -58,7 +55,7 @@ const NewPrompt = ({ data }) => {
       queryClient
         .invalidateQueries({ queryKey: ["chat", data._id] })
         .then(() => {
-          formRef.current?.reset();
+          formRef.current.reset();
           setQuestion("");
           setAnswer("");
           setImg({
@@ -78,37 +75,40 @@ const NewPrompt = ({ data }) => {
     if (!isInitial) setQuestion(text);
 
     try {
-      const chat = getChatInstance(); // Get fresh chat instance
       const result = await chat.sendMessageStream(
         Object.entries(img.aiData).length ? [img.aiData, text] : [text]
       );
-
       let accumulatedText = "";
       for await (const chunk of result.stream) {
         const chunkText = chunk.text();
+        console.log(chunkText);
         accumulatedText += chunkText;
         setAnswer(accumulatedText);
       }
 
       mutation.mutate();
     } catch (err) {
-      console.error("Error in add function:", err);
-      setAnswer("Sorry, there was an error processing your request.");
+      console.log(err);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const text = e.target.text.value;
     if (!text) return;
+
     add(text, false);
   };
 
-  // Initialize first message if needed
+  // IN PRODUCTION WE DON'T NEED IT
   const hasRun = useRef(false);
+
   useEffect(() => {
-    if (!hasRun.current && data?.history?.length === 1) {
-      add(data.history[0].parts[0].text, true);
+    if (!hasRun.current) {
+      if (data?.history?.length === 1) {
+        add(data.history[0].parts[0].text, true);
+      }
     }
     hasRun.current = true;
   }, []);
@@ -135,15 +135,7 @@ const NewPrompt = ({ data }) => {
       <form className="newForm" onSubmit={handleSubmit} ref={formRef}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
-        <input
-          type="text"
-          name="text"
-          placeholder="Ask anything..."
-           autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-        />
+        <input type="text" name="text" placeholder="Ask anything..." />
         <button>
           <img src="/arrow.png" alt="" />
         </button>

@@ -161,9 +161,9 @@ app.use((err, req, res, next) => {
 /**
  * For production below two app.use and get jsut add "/dist"  after client to update path to where our react build app is strored
  */
-app.use(express.static(path.join(__dirname,"../client")))
+app.use(express.static(path.join(__dirname,"../client/dist")))
 app.get("*", (rq, res) => {
-  res.sendFile(path.join(__dirname, "../client", "index.html"))
+  res.sendFile(path.join(__dirname, "../client/distcd", "index.html"))
 })
 
 app.listen(port, () => {

@@ -1,8 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/backend/:path*", "destination": "/backend/:path*" }
-  ],
   "functions": {
-    "backend/**/*.js": { "runtime": "nodejs18.x" }
+    "backend/**/*.js": { "runtime": "nodejs20.x" }
   }
 }

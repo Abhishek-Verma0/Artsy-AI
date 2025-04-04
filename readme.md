@@ -35,7 +35,8 @@
 ![Home](./readme_asset/homePage.png)
 
 
-
+### 💬 Chat Functionality
+![Chat](./readme_asset/chatPage.png)
 
 ### 🖼️ Art Style Prediction
 ![Prediction](./readme_asset/prediction0.png)

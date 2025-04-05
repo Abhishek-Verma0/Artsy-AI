@@ -1,6 +1,6 @@
 # 🖼️ Artsy AI
 
-**Artsy AI** is an intelligent chatbot powered by the **Gemini API** that can analyze an uploaded image and **predict its art style**. It also functions like ChatGPT for general text-based queries. Built with the **MERN stack**, it uses **Clerk** for user authentication and **ImageKit** for image storage.
+**Artsy AI** is an intelligent chatbot powered by the **Gemini API** that can analyze an uploaded image and **predict its art style** and suggest you art style based on your interest. It also functions like ChatGPT for general text-based queries. Built with the **MERN stack**, it uses **Clerk** for user authentication and **ImageKit** for image storage.
 
 ---
 

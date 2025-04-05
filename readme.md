@@ -38,7 +38,19 @@
 ### 💬 Chat Functionality
 ![Chat](./readme_asset/chatpage.png)
 
+### 🖼️ Art Style Suggestions
+![Prediction](./readme_asset/suggest1.png)
+
+![Prediction](./readme_asset/suggest2.png)
+
+![Prediction](./readme_asset/suggest3.png)
+
+![Prediction](./readme_asset/suggest4.png)
+![Prediction](./readme_asset/suggest5.png)
+
+
 ### 🖼️ Art Style Prediction
+
 ![Prediction](./readme_asset/prediction0.png)
 
 
